@@ -3,6 +3,8 @@ public class Customer {
     private boolean isOnBoarded;
     private CreditCard creditCard;
     private Account account;
+    private boolean hasOverDueHistory = false;
+    private boolean hasOverDueBill = false;
 
     public Customer(String name) {
         this.name = name;
@@ -19,16 +21,10 @@ public class Customer {
         this.issueCreditCard();
         this.isOnBoarded = true;
     }
-
-    public String getName() {
-        return name;
-    }
-
     public void issueCreditCard(){
         this.creditCard = new CreditCard(this);
         this.account = new Account(this.name);
     }
-
     public void activeCreditCard(){
         if (this.creditCard.isActive() == false) {
             this.creditCard.setActive(true);
@@ -38,13 +34,15 @@ public class Customer {
             System.out.println("Card has been activated already");
         }
     }
-
     public void useCard(){
         if (this.creditCard.isActive()) {
             this.account.setAvailableFund(this.account.getAvailableFund() - 400);
             this.account.setCreditUsed(this.account.getCreditUsed() + 400);
+            this.account.addBill(new Bill(400, System.currentTimeMillis()));
+
             System.out.println("You spend 400 dollars");
             this.account.creditChecking();
+            this.account.checkingBill(System.currentTimeMillis());
 
             if (this.account.getAvailableFund() < 0){
                 this.account.suspended();
@@ -56,20 +54,10 @@ public class Customer {
             System.out.println("Your account has already been suspended, you cannot your card until you have more than zero available funds");
         }
     }
-
-    public Account getAccount() {
-        return account;
-    }
-
     public void reportLostCard(){
         this.account.pending();
         this.creditCard.setActive(false);
     }
-
-    public CreditCard getCreditCard() {
-        return creditCard;
-    }
-
     public void payBill(double amount){
 
         this.account.setAvailableFund(this.account.getAvailableFund() + amount);
@@ -82,4 +70,24 @@ public class Customer {
             this.account.creditChecking();
         }
     }
+    public boolean hasOverDueBill(long currTime){
+        for (Bill bill : this.account.getBills()){
+            if (bill.isOverDue(currTime)){
+                this.hasOverDueBill = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+    public Account getAccount() {
+        return account;
+    }
+    public String getName() {
+        return name;
+    }
+
 }

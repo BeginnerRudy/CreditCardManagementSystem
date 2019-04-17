@@ -5,7 +5,8 @@ public class Main {
     public static final String Ask_Whether_Customer_Has_Account = "Do you already have an account? ";
     public static final String User_Input_Command_Panel = "Please enter 1 for yes, 0 for no, 2 for cancel: ";
     public static final String User_Input_Command_Panel_2 = "0 for exit, 1 for report card stolen, 2 for consuming $400" +
-            " with card, 3 for activate card, 4 for checking credit, 5 for pay all the bill, 6 for account state checking";
+            " with card,\n 3 for activate card, 4 for checking credit, 5 for pay all the bill, 6 for account state checking\n" +
+            ", 7 for bill checking";
     public static final String Warning_For_Incorret_Input = "Sorry, you enter invalid input.";
     public static final String Say_Goodbye = "Thanks for using!";
 
@@ -21,6 +22,20 @@ public class Main {
         System.out.println(User_Input_Command_Panel_2);
         String userinput2 = getUserInput2(scanner);
         while (!isInput2Exit(userinput2)){
+            // check if there is any overdue bill if it is make account into default state
+            if (customer.getAccount().getState() != Account.State.Default){
+                if (customer.hasOverDueBill(System.currentTimeMillis())){
+                    customer.getAccount().toDefault();
+                }
+            }
+
+            // go into restrict state
+            if (customer.getAccount().getState() == Account.State.Default){
+                // do something
+                System.out.println("Now should go into the restrict state");
+            }
+
+
             if (isInput2ReportCardStolen(userinput2)){
                 customer.reportLostCard();
             }else if (isInput2Active(userinput2)){
@@ -39,6 +54,8 @@ public class Main {
                 }
             }else if (isInput2CheckState(userinput2)){
                 System.out.println(String.format("Current state of the account is %s", customer.getAccount().getState()));
+            }else if (isInput2BillChecking(userinput2)){
+                customer.getAccount().checkingBill(System.currentTimeMillis());
             }
 
             System.out.println("What would you like to do now?");
@@ -53,7 +70,7 @@ public class Main {
     }
 
     private static boolean input_is_valid2(String input){
-        return (input.equals("0") || input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4") || input.equals("5")|| input.equals("6"));
+        return (input.equals("0") || input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4") || input.equals("5")|| input.equals("6")|| input.equals("7"));
     }
 
     private static boolean is_input_yes(String in){
@@ -84,6 +101,9 @@ public class Main {
 
     private static boolean isInput2CreditChecking(String in){
         return in.equals("4");
+    }
+    private static boolean isInput2BillChecking(String in){
+        return in.equals("7");
     }
 
     private static boolean isInput2PayBill(String in){

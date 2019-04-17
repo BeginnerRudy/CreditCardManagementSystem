@@ -21,9 +21,6 @@ public class CreditCard {
     public boolean isActive() {
         return isActive;
     }
-
-
-
     public void setActive(boolean active) {
         this.isActive = active;
     }

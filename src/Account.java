@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Account {
     enum State{
         Pending, Active, Suspended, Default, Close;
@@ -8,12 +10,9 @@ public class Account {
     private String username;
     private double creditLimit = 1000;
     private double availableFund = 1000;
-
-    public double getAvailableFund() {
-        return availableFund;
-    }
-
     private double creditUsed = 0;
+    private ArrayList<Bill> bills = new ArrayList<>();
+
 
     public Account(String username) {
         this.username = username;
@@ -22,9 +21,6 @@ public class Account {
         System.out.println("++++++++++++++++++++++++++++++++++++++++++");
     }
 
-    public State getState() {
-        return state;
-    }
 
     public void close() {
         this.state = State.Close;
@@ -45,7 +41,6 @@ public class Account {
             System.out.println(String.format("You are currently in the state of %s", this.state));
         }
     }
-
     public void suspended(){
         if (this.state == State.Active){
             this.state = State.Suspended;
@@ -56,7 +51,6 @@ public class Account {
             System.out.println("Invalid Transition");
         }
     }
-
     public void active(){
         if (this.state == State.Pending){
             this.state = State.Active;
@@ -74,21 +68,53 @@ public class Account {
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
         }
     }
+    public void toDefault() {
+        if (this.state == State.Active || this.state == State.Suspended) {
+            this.state = State.Default;
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: Default\nTransition: %s -> Default\n" +
+                    "Event -> There is overdue bill\nAction: Account is in default state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+        } else if (this.state == State.Default) {
+            System.out.println("The account has already been in default state! Please pay the overdue bills");
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }
+    }
+    public void creditChecking(){
+        System.out.println(String.format("Credit Limit: %.1f Credit Used: %.1f Available Fund %f", this.creditLimit, this.creditUsed, this.availableFund));
+    }
 
+
+    public void checkingBill(long currTime){
+        if (bills == null){
+            System.out.println("Hey, you have no bill now.");
+        }else{
+            for (Bill bill : bills){
+                System.out.println(bill.toString(currTime));
+            }
+        }
+    }
 
     public double getCreditUsed() {
         return creditUsed;
     }
-
+    public State getState() {
+        return state;
+    }
+    public double getAvailableFund() {
+        return availableFund;
+    }
     public void setAvailableFund(double availableFund) {
             this.availableFund = availableFund;
     }
     public void setCreditUsed(double creditUsed) {
         this.creditUsed = creditUsed;
     }
-
-    public void creditChecking(){
-        System.out.println(String.format("Credit Limit: %.1f Credit Used: %.1f Available Fund %f", this.creditLimit, this.creditUsed, this.availableFund));
+    public void addBill(Bill bill) {
+        this.bills.add(bill);
     }
-
+    public ArrayList<Bill> getBills() {
+        return bills;
+    }
 }
