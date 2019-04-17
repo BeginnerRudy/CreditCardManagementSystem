@@ -30,4 +30,16 @@ public class Customer {
     public void activeCreditCard(){
         this.creditCard.setActive(true);
     }
+
+    public void useCard(){
+        if (this.creditCard.isActive()) {
+            this.creditCard.setCreditUsed(this.creditCard.getCreditUsed() + 400);
+        }else{
+            System.out.println("Please activate your credit card first!");
+        }
+    }
+
+    public void reportLostCard(){
+        this.
+    }
 }

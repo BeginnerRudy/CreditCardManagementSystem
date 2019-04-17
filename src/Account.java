@@ -22,13 +22,26 @@ public class Account {
         this.state = State.Close;
     }
 
+    public void suspended(){
+        if (this.state == State.Active){
+            this.state = State.Suspended;
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println("Current State: Suspended\nTransition: Active -> Suspended\nEvent -> Credit used over credit limit\nAction: Account is suspended.");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+        }else{
+            System.out.println("Invalid Transition");
+        }
+    }
+
     public void active(){
-        if (this.state != State.Close){
+        if (this.state == State.Pending){
             this.state = State.Active;
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println("Current State: Active\nTransition: Pending -> Active\nEvent -> Credit card is activated\nAction: Account is active");
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
-        }else{
+        }else if(this.state == State.Active){
+            System.out.println("The account has already been activated before!");
+        }else if (this.state == State.Close){
             System.out.println("This account has been closed, please apply for another new account.");
         }
     }

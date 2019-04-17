@@ -4,7 +4,7 @@ public class Main {
     public static final String Welcome_Message  = "Welcome to our credit card management system!";
     public static final String Ask_Whether_Customer_Has_Account = "Do you already have an account? ";
     public static final String User_Input_Command_Panel = "Please enter 1 for yes, 0 for no, 2 for cancel: ";
-    public static final String User_Input_Command_Panel_2 = "0 for exit, 1 for report card stolen, 2 for consuming card, 3 for activate card";
+    public static final String User_Input_Command_Panel_2 = "0 for exit, 1 for report card stolen, 2 for consuming $400 with card, 3 for activate card";
     public static final String Warning_For_Incorret_Input = "Sorry, you enter invalid input.";
     public static final String Say_Goodbye = "Thanks for using!";
 
@@ -12,29 +12,6 @@ public class Main {
         Customer customer;
 
         Scanner scanner = new Scanner(System.in);
-        String userinput = welcomingPhase(scanner);
-//        if (is_input_yes(userinput)){
-//            System.out.println("No database, thus treat as new customer");
-//            System.out.println("Please insert your card or type in customer name: ");
-//            userinput = scanner.nextLine();
-//            customer = new Customer(userinput);
-//            customer.applyForAccount();
-//        }else{
-//            System.out.println("Would you like your create a account? ");
-//            System.out.println(User_Input_Command_Panel);
-//            userinput = getUserInput(scanner);
-//            if (is_input_yes(userinput)){
-//                customer = handleCustomerCreation(scanner);
-//                handleAccountCreation(scanner, customer);
-//            }else{
-//                System.out.println(Say_Goodbye);
-//                System.exit(0);
-//            }
-//        }
-
-        System.out.println("Would you like your create a account? ");
-        System.out.println(User_Input_Command_Panel);
-        userinput = getUserInput(scanner);
         customer = handleCustomerCreation(scanner);
         handleAccountCreation(scanner, customer);
 
@@ -48,7 +25,7 @@ public class Main {
             }else if (isInput2Active(userinput2)){
                 customer.activeCreditCard();
             }else if (isInput2Consuming(userinput2)){
-
+                customer.useCard();
             }
 
 
@@ -58,13 +35,6 @@ public class Main {
         }
     }
 
-    private static String welcomingPhase(Scanner scanner){
-        System.out.println(Welcome_Message);
-        System.out.print(Ask_Whether_Customer_Has_Account);
-        System.out.println(User_Input_Command_Panel);
-
-        return getUserInput(scanner);
-    }
 
     private static boolean input_is_valid(String input){
         return (input.equals("0") || input.equals("1") || input.equals("2"));
@@ -131,7 +101,7 @@ public class Main {
 
 
     private static Customer handleCustomerCreation(Scanner scanner){
-        System.out.println("Perfect, before creating an account, you first have to register as a customer.");
+        System.out.println("Before creating an account, you first have to register as a customer.");
         System.out.println("Please enter your name: ");
         String usernmae = scanner.nextLine();
 
