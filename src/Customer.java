@@ -61,6 +61,12 @@ public class Customer {
     public void payBill(double amount){
 
         this.account.setAvailableFund(this.account.getAvailableFund() + amount);
+        if (account.getBills() != null){
+            account.getBills().remove(0);
+            this.hasOverDueBill = false;
+            this.account.active();
+        }
+
         if (this.account.getState() == Account.State.Suspended && this.account.getAvailableFund() >= 0) {
             this.account.active();
             this.creditCard.setActive(true);
@@ -74,6 +80,7 @@ public class Customer {
         for (Bill bill : this.account.getBills()){
             if (bill.isOverDue(currTime)){
                 this.hasOverDueBill = true;
+                this.hasOverDueHistory = true;
                 return true;
             }
         }

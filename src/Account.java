@@ -8,8 +8,8 @@ public class Account {
     private State state = State.Pending;
 //    private String id;
     private String username;
-    private double creditLimit = 1000;
-    private double availableFund = 1000;
+    private double creditLimit = 300;
+    private double availableFund = 300;
     private double creditUsed = 0;
     private ArrayList<Bill> bills = new ArrayList<>();
 
@@ -66,15 +66,20 @@ public class Account {
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println("Current State: Active\nTransition: Suspended -> Active\nEvent -> Having more than 0 available funds\nAction: Account is active");
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+        }else if (this.state == State.Default){
+            this.state = State.Active;
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println("Current State: Active\nTransition: Default -> Active\nEvent -> Pays all the overdue bill\nAction: Account is active");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
         }
     }
     public void toDefault() {
         if (this.state == State.Active || this.state == State.Suspended) {
-            this.state = State.Default;
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println(String.format("Current State: Default\nTransition: %s -> Default\n" +
                     "Event -> There is overdue bill\nAction: Account is in default state", this.state));
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.Default;
         } else if (this.state == State.Default) {
             System.out.println("The account has already been in default state! Please pay the overdue bills");
         } else if (this.state == State.Close) {

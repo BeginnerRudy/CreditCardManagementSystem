@@ -48,9 +48,8 @@ public class Main {
                 if (customer.getCreditCard().isActive() == false && customer.getAccount().getState() == Account.State.Pending) {
                     System.out.println("Please active credit card first!!");
                 } else {
-                    System.out.println("How much you want to pay? Please enter:");
-                    userinput2 = scanner.nextLine();
-                    customer.payBill(Double.parseDouble(userinput2));
+                    System.out.println("Each time you are going to pay 400 dollar that is one bill.");
+                    customer.payBill(Double.parseDouble("400"));
                 }
             }else if (isInput2CheckState(userinput2)){
                 System.out.println(String.format("Current state of the account is %s", customer.getAccount().getState()));
