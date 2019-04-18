@@ -56,7 +56,8 @@ public class Main {
             if (customer.getAccount().getState() == Account.State.GracePeriod){
                 // whether exceed the grace period
                 if (customer.getAccount().isOverGracePeriod(System.currentTimeMillis())){
-                    System.out.println("You would be in PlanOffered state");
+                    // Customer failed to pay bill with the grace period, then set the account state to planOffered state
+                    customer.getAccount().PlanOffered();
                 }else{
                     System.out.println(
                             String.format("The grace period would over in %d seconds, please pay the bill, or you would be in planOffered state",

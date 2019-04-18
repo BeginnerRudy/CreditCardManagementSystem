@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Account {
-    public static final long Grace_Period_Duration = 10000 * 4;
+    public static final long Grace_Period_Duration = 10000 * 1;
     enum State{
         Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered
     }
@@ -102,6 +102,13 @@ public class Account {
             this.state = State.PlanOffered;
         } else if (this.state == State.Close) {
             System.out.println("This account has been closed, please apply for another new account.");
+        }else if (this.state == State.GracePeriod){
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: PlanOffered\nTransition: %s -> PlanOffered\n" +
+                    "Event -> The customer fail to pay the bill within the grace period\n" +
+                    "Action: Account is in PlanOffered state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.PlanOffered;
         }else{
             System.out.println(String.format("Invalid transition: %s -> PlanOffered", state));
         }

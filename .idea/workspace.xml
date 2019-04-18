@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3510fc7a-dc71-405c-be04-af16be62f6d6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bill.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -36,12 +36,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="11951" />
+          <entry key="java" value="12147" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="11951" />
+          <entry key="JAVA" value="12147" />
         </counts>
       </usages-collector>
     </session>
@@ -51,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="82" column="37" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
+            <state relative-caret-position="370">
+              <caret line="72" column="13" lean-forward="true" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
               <folding>
                 <element signature="e#6651#6652#0" expanded="true" />
                 <element signature="e#6688#6689#0" expanded="true" />
@@ -121,11 +121,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Account.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="126" column="43" lean-forward="true" selection-start-line="126" selection-start-column="43" selection-end-line="126" selection-end-column="43" />
+            <state relative-caret-position="57">
+              <caret line="3" column="62" selection-start-line="3" selection-start-column="62" selection-end-line="3" selection-end-column="62" />
               <folding>
                 <element signature="method#Account#0;class#Account#0" />
                 <element signature="e#741#742#0" expanded="true" />
@@ -134,9 +134,9 @@
                 <element signature="method#suspended#0;class#Account#0" />
                 <element signature="method#active#0;class#Account#0" />
                 <element signature="method#toDefault#0;class#Account#0" />
-                <element signature="method#PlanOffered#0;class#Account#0" />
                 <element signature="method#GracePeriod#0;class#Account#0" />
                 <element signature="method#creditChecking#0;class#Account#0" />
+                <element signature="method#checkingBill#0;class#Account#0" />
                 <element signature="e#6864#6865#0" expanded="true" />
                 <element signature="e#6897#6898#0" expanded="true" />
                 <element signature="e#6927#6928#0" expanded="true" />
@@ -167,7 +167,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bill.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="127">
@@ -195,8 +195,8 @@
       <find>handle</find>
       <find>setCreditUsed</find>
       <find>hasOver</find>
-      <find>hasOverDueBill</find>
       <find>has</find>
+      <find>hasOverDueBill</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -208,9 +208,9 @@
         <option value="$PROJECT_DIR$/src/Administrator.java" />
         <option value="$PROJECT_DIR$/src/CreditCard.java" />
         <option value="$PROJECT_DIR$/src/Customer.java" />
+        <option value="$PROJECT_DIR$/src/Bill.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Account.java" />
-        <option value="$PROJECT_DIR$/src/Bill.java" />
       </list>
     </option>
   </component>
@@ -272,7 +272,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555550487060" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555550891054" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -320,12 +320,12 @@
       <workItem from="1555463906897" duration="886000" />
       <workItem from="1555465169248" duration="11323000" />
       <workItem from="1555477836592" duration="8004000" />
-      <workItem from="1555486074148" duration="10661000" />
+      <workItem from="1555486074148" duration="11061000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30874000" />
+    <option name="totallyTimeSpent" value="31274000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="-7" width="1233" height="735" extended-state="6" />
@@ -419,10 +419,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bill.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="18" column="105" selection-start-line="18" selection-start-column="105" selection-end-line="18" selection-end-column="105" />
+          <folding>
+            <element signature="e#294#295#0" expanded="true" />
+            <element signature="e#363#364#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="82" column="37" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
+        <state relative-caret-position="370">
+          <caret line="72" column="13" lean-forward="true" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
           <folding>
             <element signature="e#6651#6652#0" expanded="true" />
             <element signature="e#6688#6689#0" expanded="true" />
@@ -451,8 +462,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Account.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="126" column="43" lean-forward="true" selection-start-line="126" selection-start-column="43" selection-end-line="126" selection-end-column="43" />
+        <state relative-caret-position="57">
+          <caret line="3" column="62" selection-start-line="3" selection-start-column="62" selection-end-line="3" selection-end-column="62" />
           <folding>
             <element signature="method#Account#0;class#Account#0" />
             <element signature="e#741#742#0" expanded="true" />
@@ -461,9 +472,9 @@
             <element signature="method#suspended#0;class#Account#0" />
             <element signature="method#active#0;class#Account#0" />
             <element signature="method#toDefault#0;class#Account#0" />
-            <element signature="method#PlanOffered#0;class#Account#0" />
             <element signature="method#GracePeriod#0;class#Account#0" />
             <element signature="method#creditChecking#0;class#Account#0" />
+            <element signature="method#checkingBill#0;class#Account#0" />
             <element signature="e#6864#6865#0" expanded="true" />
             <element signature="e#6897#6898#0" expanded="true" />
             <element signature="e#6927#6928#0" expanded="true" />
@@ -480,17 +491,6 @@
             <element signature="e#7377#7378#0" expanded="true" />
             <element signature="e#7973#7974#0" expanded="true" />
             <element signature="e#8021#8022#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bill.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="18" column="105" selection-start-line="18" selection-start-column="105" selection-end-line="18" selection-end-column="105" />
-          <folding>
-            <element signature="e#294#295#0" expanded="true" />
-            <element signature="e#363#364#0" expanded="true" />
           </folding>
         </state>
       </provider>
