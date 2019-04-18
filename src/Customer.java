@@ -48,10 +48,10 @@ public class Customer {
                 this.account.suspended();
                 this.creditCard.setActive(false);
                 System.out.println("Your card has been set to inactive.");
-                System.out.println("Your account has been suspended, you cannot your card until you have more than zero available funds");
+                System.out.println(String.format("Your account is in %s, you cannot your card until you have more than zero available funds", account.getState()));
             }
         }else{
-            System.out.println("Your account has already been suspended, you cannot your card until you have more than zero available funds");
+            System.out.println(String.format("Your account is in %s, you cannot use your card now", account.getState()));
         }
     }
     public void reportLostCard(){
@@ -60,11 +60,14 @@ public class Customer {
     }
     public void payBill(double amount){
 
-        this.account.setAvailableFund(this.account.getAvailableFund() + amount);
-        if (account.getBills() != null){
+        if (account.getBills().isEmpty() == false){
+            this.account.setAvailableFund(this.account.getAvailableFund() + amount);
             account.getBills().remove(0);
             this.hasOverDueBill = false;
             this.account.active();
+            this.creditCard.setActive(true);
+        }else{
+            System.out.println("Pay bill failed, since you do not have any bill to pay!");
         }
 
         if (this.account.getState() == Account.State.Suspended && this.account.getAvailableFund() >= 0) {

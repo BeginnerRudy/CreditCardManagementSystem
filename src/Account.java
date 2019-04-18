@@ -92,7 +92,7 @@ public class Account {
 
 
     public void checkingBill(long currTime){
-        if (bills == null){
+        if (bills.isEmpty()){
             System.out.println("Hey, you have no bill now.");
         }else{
             for (Bill bill : bills){

@@ -5,8 +5,8 @@ public class Main {
     public static final String Ask_Whether_Customer_Has_Account = "Do you already have an account? ";
     public static final String User_Input_Command_Panel = "Please enter 1 for yes, 0 for no, 2 for cancel: ";
     public static final String User_Input_Command_Panel_2 = "0 for exit, 1 for report card stolen, 2 for consuming $400" +
-            " with card,\n 3 for activate card, 4 for checking credit, 5 for pay all the bill, 6 for account state checking\n" +
-            ", 7 for bill checking";
+            " with card,\n3 for activate card, 4 for checking credit, 5 for pay $400 for the bill, " +
+            "\n6 for account state checking, 7 for bill checking";
     public static final String Warning_For_Incorret_Input = "Sorry, you enter invalid input.";
     public static final String Say_Goodbye = "Thanks for using!";
 
@@ -18,8 +18,11 @@ public class Main {
         handleAccountCreation(scanner, customer);
 
         // Now we have a customer object
+        System.out.println("======================Command Window================================");
         System.out.println("What would you like to do now?");
         System.out.println(User_Input_Command_Panel_2);
+        System.out.println("====================================================================");
+        System.out.print("Please enter: ");
         String userinput2 = getUserInput2(scanner);
         while (!isInput2Exit(userinput2)){
             // check if there is any overdue bill if it is make account into default state
@@ -48,7 +51,7 @@ public class Main {
                 if (customer.getCreditCard().isActive() == false && customer.getAccount().getState() == Account.State.Pending) {
                     System.out.println("Please active credit card first!!");
                 } else {
-                    System.out.println("Each time you are going to pay 400 dollar that is one bill.");
+                    System.out.println("Each time you are going to pay 400 dollar for a bill.");
                     customer.payBill(Double.parseDouble("400"));
                 }
             }else if (isInput2CheckState(userinput2)){
@@ -57,8 +60,13 @@ public class Main {
                 customer.getAccount().checkingBill(System.currentTimeMillis());
             }
 
+            System.out.println("======================Command Window================================");
             System.out.println("What would you like to do now?");
             System.out.println(User_Input_Command_Panel_2);
+            System.out.println("====================================================================");
+            System.out.print("Please enter: ");
+
+
             userinput2 = getUserInput2(scanner);
         }
     }
