@@ -70,7 +70,10 @@ public class Customer {
             System.out.println("Pay bill failed, since you do not have any bill to pay!");
         }
 
-        if (this.account.getState() == Account.State.Suspended && this.account.getAvailableFund() >= 0) {
+        if ((this.account.getState() == Account.State.Suspended
+            || this.account.getState() == Account.State.GracePeriod
+            || this.account.getState() == Account.State.PlanOffered)
+                && this.account.getAvailableFund() >= 0) {
             this.account.active();
             this.creditCard.setActive(true);
         }else if (this.account.getState() == Account.State.Suspended){
@@ -83,7 +86,6 @@ public class Customer {
         for (Bill bill : this.account.getBills()){
             if (bill.isOverDue(currTime)){
                 this.hasOverDueBill = true;
-                this.hasOverDueHistory = true;
                 return true;
             }
         }
@@ -100,4 +102,15 @@ public class Customer {
         return name;
     }
 
+    public boolean isHasOverDueHistory() {
+        return hasOverDueHistory;
+    }
+
+    public boolean isHasOverDueBill() {
+        return hasOverDueBill;
+    }
+
+    public void setHasOverDueHistory(boolean hasOverDueHistory) {
+        this.hasOverDueHistory = hasOverDueHistory;
+    }
 }

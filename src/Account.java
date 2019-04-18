@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Account {
     enum State{
-        Pending, Active, Suspended, Default, Close;
+        Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered
     }
     // The default state is pending
     private State state = State.Pending;
@@ -61,11 +61,15 @@ public class Account {
             System.out.println("The account has already been activated before!");
         }else if (this.state == State.Close){
             System.out.println("This account has been closed, please apply for another new account.");
-        }else if (this.state == State.Suspended){
-            this.state = State.Active;
+        }else if ((this.getState() == Account.State.Suspended
+                || this.getState() == Account.State.GracePeriod
+                || this.getState() == Account.State.PlanOffered)){
             System.out.println("+++++++++++Account State Info+++++++++++++");
-            System.out.println("Current State: Active\nTransition: Suspended -> Active\nEvent -> Having more than 0 available funds\nAction: Account is active");
+            System.out.println(String.format("Current State: Active\nTransition: %s -> Active\nEvent -> " +
+                    "Having more than 0 available funds\nAction: Account is active", this.state));
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+
+            this.state = State.Active;
         }else if (this.state == State.Default){
             this.state = State.Active;
             System.out.println("+++++++++++Account State Info+++++++++++++");
@@ -84,6 +88,36 @@ public class Account {
             System.out.println("The account has already been in default state! Please pay the overdue bills");
         } else if (this.state == State.Close) {
             System.out.println("This account has been closed, please apply for another new account.");
+        }
+    }
+    public void PlanOffered() {
+        if (this.state == State.Default) {
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: PlanOffered\nTransition: %s -> PlanOffered\n" +
+                    "Event -> There is overdue bill and the customer has overdue payment history\n" +
+                    "Action: Account is in PlanOffered state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.PlanOffered;
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }else{
+            System.out.println(String.format("Invalid transition: %s -> PlanOffered", state));
+        }
+    }
+
+
+    public void GracePeriod() {
+        if (this.state == State.Default) {
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: GracePeriod\nTransition: %s -> GracePeriod\n" +
+                    "Event -> There is overdue bill and the customer has no overdue payment history\n" +
+                    "Action: Account is in GracePeriod state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.GracePeriod;
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }else{
+            System.out.println(String.format("Invalid transition: %s -> GracePeriod", state));
         }
     }
     public void creditChecking(){

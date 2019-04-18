@@ -25,6 +25,10 @@ public class Main {
         System.out.print("Please enter: ");
         String userinput2 = getUserInput2(scanner);
         while (!isInput2Exit(userinput2)){
+            // check if the account has been inactive for more than certain time, if so close the account
+
+            // check if the account is (has no outstanding bill && has not been used for more than certain time), if so make the account into pending state
+
             // check if there is any overdue bill if it is make account into default state
             if (customer.getAccount().getState() != Account.State.Default){
                 if (customer.hasOverDueBill(System.currentTimeMillis())){
@@ -32,12 +36,25 @@ public class Main {
                 }
             }
 
-            // go into restrict state
-            if (customer.getAccount().getState() == Account.State.Default){
+            // go into restrict state, when the customer has overdue bill and the account is in default
+            if (customer.getAccount().getState() == Account.State.Default && customer.isHasOverDueBill()) {
                 // do something
-                System.out.println("Now should go into the restrict state");
+                System.out.println("Now should go into the restrict state, CAREFUL. if you do not behave appropriately, your account would be closed");
+                // if the user has no overdue history
+                if (!customer.isHasOverDueHistory()) {
+                    // enter the Grace period
+                    customer.getAccount().GracePeriod();
+                    customer.setHasOverDueHistory(true);
+                } else {
+                    // enter the plan offered state
+                    customer.getAccount().PlanOffered();
+                    // Charge a $20 fee, offer a plan
+                }
             }
 
+            // handle the grace period state
+
+            // handle the plan offered state
 
             if (isInput2ReportCardStolen(userinput2)){
                 customer.reportLostCard();
