@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Account {
+    public static final long Grace_Period_Duration = 10000 * 4;
     enum State{
         Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered
     }
@@ -12,6 +13,7 @@ public class Account {
     private double availableFund = 300;
     private double creditUsed = 0;
     private ArrayList<Bill> bills = new ArrayList<>();
+    private long gracePeriodStartTimeStamp;
 
 
     public Account(String username) {
@@ -104,9 +106,7 @@ public class Account {
             System.out.println(String.format("Invalid transition: %s -> PlanOffered", state));
         }
     }
-
-
-    public void GracePeriod() {
+    public void GracePeriod(long currTime) {
         if (this.state == State.Default) {
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println(String.format("Current State: GracePeriod\nTransition: %s -> GracePeriod\n" +
@@ -114,6 +114,7 @@ public class Account {
                     "Action: Account is in GracePeriod state", this.state));
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
             this.state = State.GracePeriod;
+            this.gracePeriodStartTimeStamp = currTime;
         } else if (this.state == State.Close) {
             System.out.println("This account has been closed, please apply for another new account.");
         }else{
@@ -123,8 +124,6 @@ public class Account {
     public void creditChecking(){
         System.out.println(String.format("Credit Limit: %.1f Credit Used: %.1f Available Fund %f", this.creditLimit, this.creditUsed, this.availableFund));
     }
-
-
     public void checkingBill(long currTime){
         if (bills.isEmpty()){
             System.out.println("Hey, you have no bill now.");
@@ -133,6 +132,9 @@ public class Account {
                 System.out.println(bill.toString(currTime));
             }
         }
+    }
+    public boolean isOverGracePeriod(long currTime){
+        return (Grace_Period_Duration - (currTime - gracePeriodStartTimeStamp) < 0);
     }
 
     public double getCreditUsed() {
@@ -155,5 +157,9 @@ public class Account {
     }
     public ArrayList<Bill> getBills() {
         return bills;
+    }
+
+    public long getGracePeriodStartTimeStamp() {
+        return gracePeriodStartTimeStamp;
     }
 }

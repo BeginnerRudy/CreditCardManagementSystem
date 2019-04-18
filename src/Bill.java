@@ -16,7 +16,7 @@ public class Bill {
         String out = "";
         out += String.format("Bill issue time %d ", timeStamp);
         out += String.format("Bill amount is %f ", ampunt );
-        out += String.format("Bill would over due in %d milliseconds\n", due - (currentTime - timeStamp));
+        out += String.format("Bill would over due in %d second\n", (due - (currentTime - timeStamp))/1000);
 
         return out;
     }

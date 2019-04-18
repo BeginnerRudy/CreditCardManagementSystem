@@ -43,7 +43,7 @@ public class Main {
                 // if the user has no overdue history
                 if (!customer.isHasOverDueHistory()) {
                     // enter the Grace period
-                    customer.getAccount().GracePeriod();
+                    customer.getAccount().GracePeriod(System.currentTimeMillis());
                     customer.setHasOverDueHistory(true);
                 } else {
                     // enter the plan offered state
@@ -53,8 +53,23 @@ public class Main {
             }
 
             // handle the grace period state
+            if (customer.getAccount().getState() == Account.State.GracePeriod){
+                // whether exceed the grace period
+                if (customer.getAccount().isOverGracePeriod(System.currentTimeMillis())){
+                    System.out.println("You would be in PlanOffered state");
+                }else{
+                    System.out.println(
+                            String.format("The grace period would over in %d seconds, please pay the bill, or you would be in planOffered state",
+                            (Account.Grace_Period_Duration - (System.currentTimeMillis() - customer.getAccount().getGracePeriodStartTimeStamp()))/1000
+                        )
+                    );
+                }
+            }
 
             // handle the plan offered state
+            if (customer.getAccount().getState() == Account.State.PlanOffered){
+
+            }
 
             if (isInput2ReportCardStolen(userinput2)){
                 customer.reportLostCard();
@@ -73,6 +88,7 @@ public class Main {
                 }
             }else if (isInput2CheckState(userinput2)){
                 System.out.println(String.format("Current state of the account is %s", customer.getAccount().getState()));
+
             }else if (isInput2BillChecking(userinput2)){
                 customer.getAccount().checkingBill(System.currentTimeMillis());
             }
