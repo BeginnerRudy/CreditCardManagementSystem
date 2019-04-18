@@ -41,6 +41,7 @@ public class Customer {
             this.account.addBill(new Bill(400, System.currentTimeMillis()));
 
             System.out.println("You spend 400 dollars");
+            this.creditCard.setLastUsed(System.currentTimeMillis());
             this.account.creditChecking();
             this.account.checkingBill(System.currentTimeMillis());
 

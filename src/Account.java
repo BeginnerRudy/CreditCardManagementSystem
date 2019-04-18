@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Account {
     public static final long Grace_Period_Duration = 10000 * 1;
     public static final long Payment_Plan_Period_Duration = 10000 * 1;
-    public static final long Unhealth_Debyt_Payment_Plan_Period_Duration = 10000 * 1;
+    public static final long Unhealth_Debt_Payment_Plan_Period_Duration = 10000 * 1;
     enum State{
         Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered, HealthyDebt, UnhealthyDebt, Collection
     }
@@ -17,7 +17,7 @@ public class Account {
     private ArrayList<Bill> bills = new ArrayList<>();
     private long gracePeriodStartTimeStamp;
     private long paymentPlanStartTimeStamp;
-    private long unhealthyDebtPaymentPlanStartTimeStamp;
+    private long unhealthyDebtPaymentPlanStartTimeStamp ;
 
 
     public Account(String username) {
@@ -148,7 +148,7 @@ public class Account {
             System.out.println(String.format("Invalid transition: %s -> HealthyDebt", state));
         }
     }
-    public void UnhealthyDebt(){
+    public void UnhealthyDebt(long currTime){
         if (this.state == State.PlanOffered) {
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println(String.format("Current State: UnhealthyDebt\nTransition: %s -> UnhealthyDebt\n" +
@@ -156,6 +156,7 @@ public class Account {
                     "Action: Account is in UnhealthyDebt state", this.state));
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
             this.state = State.UnhealthyDebt;
+            this.unhealthyDebtPaymentPlanStartTimeStamp = currTime;
         } else if (this.state == State.Close) {
             System.out.println("This account has been closed, please apply for another new account.");
         }else if (this.state == State.HealthyDebt){
@@ -204,7 +205,7 @@ public class Account {
     }
 
     public boolean isOverUnhealthyDebtPaymentPlanPeriod(long currTime){
-        return (Unhealth_Debyt_Payment_Plan_Period_Duration - (currTime - unhealthyDebtPaymentPlanStartTimeStamp) < 0);
+        return (Unhealth_Debt_Payment_Plan_Period_Duration - (currTime - unhealthyDebtPaymentPlanStartTimeStamp) < 0);
     }
 
     public double getCreditUsed() {

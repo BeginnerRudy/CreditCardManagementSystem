@@ -6,6 +6,7 @@ public class CreditCard {
     private boolean isLostOrStolen = false;
     private Date lastUsedDate;
     private Customer cardHolder;
+    private long lastUsed  = System.currentTimeMillis();
 
     public CreditCard(Customer cardHolder) {
         System.out.println("Loading.......");
@@ -23,5 +24,13 @@ public class CreditCard {
     }
     public void setActive(boolean active) {
         this.isActive = active;
+    }
+
+    public long getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(long lastUsed) {
+        this.lastUsed = lastUsed;
     }
 }

@@ -9,6 +9,7 @@ public class Main {
             "\n6 for account state checking, 7 for bill checking";
     public static final String Warning_For_Incorret_Input = "Sorry, you enter invalid input.";
     public static final String Say_Goodbye = "Thanks for using!";
+    public static final long Period_Not_Used_To_Pending_Limit = 1000*10;
 
     public static void main(String[] args) {
         Customer customer;
@@ -28,6 +29,15 @@ public class Main {
             // check if the account has been inactive for more than certain time, if so close the account
 
             // check if the account is (has no outstanding bill && has not been used for more than certain time), if so make the account into pending state
+            if (customer.getAccount().getState() == Account.State.Active){
+                if( Period_Not_Used_To_Pending_Limit - (System.currentTimeMillis() - customer.getCreditCard().getLastUsed()) < 0){
+                    customer.getAccount().pending();
+                    customer.getCreditCard().setActive(false);
+                    System.out.println("You have not used your card for more than 6 month (20s actually), Now it is in pending state.");
+                    System.out.println("If you want to use again, please active the credit card.");
+                }
+            }
+
 
             // check if there is any overdue bill if it is make account into default state
             if (customer.getAccount().getState() != Account.State.Default){
@@ -89,7 +99,7 @@ public class Main {
                 // whether exceed the payment plan period
                 if (customer.getAccount().isOverPaymentPlanPeriod(System.currentTimeMillis())){
                     // Customer failed to pay bill with the grace period, then set the account state to planOffered state
-                    customer.getAccount().UnhealthyDebt();
+                    customer.getAccount().UnhealthyDebt(System.currentTimeMillis());
                 }else{
                     System.out.println(
                             String.format("The payment period would over in %d seconds, please pay the bill, or you would be in UnhealthyDebt state",
@@ -108,7 +118,7 @@ public class Main {
                     System.out.println(
                             String.format("The final payment period before be collected would over in %d seconds," +
                                             " please pay the bill, or you would be in collection state",
-                                    (Account.Unhealth_Debyt_Payment_Plan_Period_Duration
+                                    (Account.Unhealth_Debt_Payment_Plan_Period_Duration
                                             - (System.currentTimeMillis() - customer.getAccount().getUnhealthyDebtPaymentPlanStartTimeStamp()))/1000
                             )
                     );
@@ -120,6 +130,7 @@ public class Main {
                 customer.reportLostCard();
             }else if (isInput2Active(userinput2)){
                 customer.activeCreditCard();
+                customer.getCreditCard().setLastUsed(System.currentTimeMillis());
             }else if (isInput2Consuming(userinput2)){
                 customer.useCard();
             }else if (isInput2CreditChecking(userinput2)){
@@ -140,6 +151,10 @@ public class Main {
 
             System.out.println("======================Command Window================================");
             System.out.println("What would you like to do now?");
+            if (customer.getAccount().getState() == Account.State.Active){
+                System.out.println(String.format("If you do not use your card within %d second, then it would be pending",
+                        (Period_Not_Used_To_Pending_Limit - (System.currentTimeMillis() - customer.getCreditCard().getLastUsed()))/1000));
+            }
             System.out.println(User_Input_Command_Panel_2);
             System.out.println("====================================================================");
             System.out.print("Please enter: ");
