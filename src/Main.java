@@ -9,7 +9,7 @@ public class Main {
             "\n6 for account state checking, 7 for bill checking";
     public static final String Warning_For_Incorret_Input = "Sorry, you enter invalid input.";
     public static final String Say_Goodbye = "Thanks for using!";
-    public static final long Period_Not_Used_To_Pending_Limit = 1000*10;
+    public static final long Period_Not_Used_To_Pending_Limit = 10000*3;
 
     public static void main(String[] args) {
         Customer customer;
@@ -21,12 +21,18 @@ public class Main {
         // Now we have a customer object
         System.out.println("======================Command Window================================");
         System.out.println("What would you like to do now?");
+        System.out.println(String.format("If your account still be inactive for %d seonds, then your account would be closed automatically",
+                (Account.Lmit_Of_Account_Been_Inactive - (System.currentTimeMillis() - customer.getAccount().getAccountInactiveStartTimeStamp()))/1000));
         System.out.println(User_Input_Command_Panel_2);
         System.out.println("====================================================================");
         System.out.print("Please enter: ");
         String userinput2 = getUserInput2(scanner);
         while (!isInput2Exit(userinput2)){
             // check if the account has been inactive for more than certain time, if so close the account
+            if ((Account.Lmit_Of_Account_Been_Inactive - (System.currentTimeMillis() - customer.getAccount().getAccountInactiveStartTimeStamp())) < 0){
+                customer.getAccount().close();
+            }
+
 
             // check if the account is (has no outstanding bill && has not been used for more than certain time), if so make the account into pending state
             if (customer.getAccount().getState() == Account.State.Active){
@@ -127,10 +133,15 @@ public class Main {
 
 
             if (isInput2ReportCardStolen(userinput2)){
+                if (customer.getAccount().getState() == Account.State.Active) {
+                    customer.getAccount().setAccountInactiveStartTimeStamp(System.currentTimeMillis());
+                }
                 customer.reportLostCard();
             }else if (isInput2Active(userinput2)){
+                if (!customer.getCreditCard().isActive()){
+                    customer.getCreditCard().setLastUsed(System.currentTimeMillis());
+                }
                 customer.activeCreditCard();
-                customer.getCreditCard().setLastUsed(System.currentTimeMillis());
             }else if (isInput2Consuming(userinput2)){
                 customer.useCard();
             }else if (isInput2CreditChecking(userinput2)){
@@ -154,6 +165,41 @@ public class Main {
             if (customer.getAccount().getState() == Account.State.Active){
                 System.out.println(String.format("If you do not use your card within %d second, then it would be pending",
                         (Period_Not_Used_To_Pending_Limit - (System.currentTimeMillis() - customer.getCreditCard().getLastUsed()))/1000));
+            }else if (customer.getAccount().getState() != Account.State.Close ||
+                      customer.getAccount().getState() != Account.State.Collection){
+                System.out.println(String.format("If your account still be inactive for %d seonds, then your account would be closed automatically",
+                        (Account.Lmit_Of_Account_Been_Inactive - (System.currentTimeMillis() - customer.getAccount().getAccountInactiveStartTimeStamp()))/1000));
+            }
+
+            if (customer.getAccount().getState() == Account.State.Suspended){
+                customer.getAccount().checkingBill(System.currentTimeMillis());
+            }
+
+
+            if (customer.getAccount().getState() == Account.State.GracePeriod){
+                System.out.println(
+                        String.format("The grace period would over in %d seconds, please pay the bill, or you would be in planOffered state",
+                                (Account.Grace_Period_Duration - (System.currentTimeMillis() - customer.getAccount().getGracePeriodStartTimeStamp()))/1000
+                        )
+                );
+            }
+
+            if (customer.getAccount().getState() == Account.State.HealthyDebt){
+                System.out.println(
+                        String.format("The payment period would over in %d seconds, please pay the bill, or you would be in UnhealthyDebt state",
+                                (Account.Payment_Plan_Period_Duration - (System.currentTimeMillis() - customer.getAccount().getPaymentPlanStartTimeStamp()))/1000
+                        )
+                );
+            }
+
+            if (customer.getAccount().getState() == Account.State.UnhealthyDebt){
+                System.out.println(
+                        String.format("The final payment period before be collected would over in %d seconds," +
+                                        " please pay the bill, or you would be in collection state",
+                                (Account.Unhealth_Debt_Payment_Plan_Period_Duration
+                                        - (System.currentTimeMillis() - customer.getAccount().getUnhealthyDebtPaymentPlanStartTimeStamp()))/1000
+                        )
+                );
             }
             System.out.println(User_Input_Command_Panel_2);
             System.out.println("====================================================================");

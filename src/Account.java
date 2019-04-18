@@ -4,6 +4,7 @@ public class Account {
     public static final long Grace_Period_Duration = 10000 * 1;
     public static final long Payment_Plan_Period_Duration = 10000 * 1;
     public static final long Unhealth_Debt_Payment_Plan_Period_Duration = 10000 * 1;
+    public static final long Lmit_Of_Account_Been_Inactive = 10000 * 6;
     enum State{
         Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered, HealthyDebt, UnhealthyDebt, Collection
     }
@@ -18,6 +19,7 @@ public class Account {
     private long gracePeriodStartTimeStamp;
     private long paymentPlanStartTimeStamp;
     private long unhealthyDebtPaymentPlanStartTimeStamp ;
+    private long accountInactiveStartTimeStamp;
 
 
     public Account(String username) {
@@ -25,6 +27,7 @@ public class Account {
         System.out.println("+++++++++++Account State Info+++++++++++++");
         System.out.println("Current State: Pending\nTransition: Start -> Pending\nEvent -> Customer is onboarded\nAction: Account is pending");
         System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+        accountInactiveStartTimeStamp = System.currentTimeMillis();
     }
 
 
@@ -60,6 +63,7 @@ public class Account {
     public void active(){
         if (this.state == State.Pending){
             this.state = State.Active;
+            accountInactiveStartTimeStamp = System.currentTimeMillis();
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println("Current State: Active\nTransition: Pending -> Active\nEvent -> Credit card is activated\nAction: Account is active");
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
@@ -75,9 +79,10 @@ public class Account {
             System.out.println(String.format("Current State: Active\nTransition: %s -> Active\nEvent -> " +
                     "Having more than 0 available funds\nAction: Account is active", this.state));
             System.out.println("++++++++++++++++++++++++++++++++++++++++++");
-
+            accountInactiveStartTimeStamp = System.currentTimeMillis();
             this.state = State.Active;
         }else if (this.state == State.Default){
+            accountInactiveStartTimeStamp = System.currentTimeMillis();
             this.state = State.Active;
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println("Current State: Active\nTransition: Default -> Active\nEvent -> Pays all the overdue bill\nAction: Account is active");
@@ -240,5 +245,13 @@ public class Account {
 
     public long getUnhealthyDebtPaymentPlanStartTimeStamp() {
         return unhealthyDebtPaymentPlanStartTimeStamp;
+    }
+
+    public long getAccountInactiveStartTimeStamp() {
+        return accountInactiveStartTimeStamp;
+    }
+
+    public void setAccountInactiveStartTimeStamp(long accountInactiveStartTimeStamp) {
+        this.accountInactiveStartTimeStamp = accountInactiveStartTimeStamp;
     }
 }
