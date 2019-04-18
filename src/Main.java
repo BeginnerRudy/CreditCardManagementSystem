@@ -48,7 +48,6 @@ public class Main {
                 } else {
                     // enter the plan offered state
                     customer.getAccount().PlanOffered();
-                    // Charge a $20 fee, offer a plan
                 }
             }
 
@@ -69,8 +68,53 @@ public class Main {
 
             // handle the plan offered state
             if (customer.getAccount().getState() == Account.State.PlanOffered){
-
+                System.out.println("You have been charge $20! (Fake message, the purpose is to show this step)");
+                System.out.println("Next, we are going to offer you a plan");
+                System.out.println("Are you going to accept it?");
+                System.out.println(User_Input_Command_Panel);
+                userinput2 = getUserInput(scanner);
+                // user accept the plan
+                if (is_input_yes(userinput2)){
+                    // go to the the healthy debt state
+                    customer.getAccount().HealthyDebt(System.currentTimeMillis());
+                // user refuse the plan
+                }else{
+                    // go to the unhealthy debt state
+                    customer.getAccount().HealthyDebt(System.currentTimeMillis());
+                }
             }
+
+            // handle when the account is in healthy debt state
+            if (customer.getAccount().getState() == Account.State.HealthyDebt){
+                // whether exceed the payment plan period
+                if (customer.getAccount().isOverPaymentPlanPeriod(System.currentTimeMillis())){
+                    // Customer failed to pay bill with the grace period, then set the account state to planOffered state
+                    customer.getAccount().UnhealthyDebt();
+                }else{
+                    System.out.println(
+                            String.format("The payment period would over in %d seconds, please pay the bill, or you would be in UnhealthyDebt state",
+                                    (Account.Payment_Plan_Period_Duration - (System.currentTimeMillis() - customer.getAccount().getPaymentPlanStartTimeStamp()))/1000
+                            )
+                    );
+                }
+            }
+            // handel when the account is in unhealthy debt state
+            if (customer.getAccount().getState() == Account.State.UnhealthyDebt){
+                // whether exceed the unhealthy payment period
+                if (customer.getAccount().isOverUnhealthyDebtPaymentPlanPeriod(System.currentTimeMillis())){
+                    // Customer failed to pay bill within the final period, then set the account state to collection state
+                    customer.getAccount().Collection();
+                }else{
+                    System.out.println(
+                            String.format("The final payment period before be collected would over in %d seconds," +
+                                            " please pay the bill, or you would be in collection state",
+                                    (Account.Unhealth_Debyt_Payment_Plan_Period_Duration
+                                            - (System.currentTimeMillis() - customer.getAccount().getUnhealthyDebtPaymentPlanStartTimeStamp()))/1000
+                            )
+                    );
+                }
+            }
+
 
             if (isInput2ReportCardStolen(userinput2)){
                 customer.reportLostCard();

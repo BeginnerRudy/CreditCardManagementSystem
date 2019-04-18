@@ -2,8 +2,10 @@ import java.util.ArrayList;
 
 public class Account {
     public static final long Grace_Period_Duration = 10000 * 1;
+    public static final long Payment_Plan_Period_Duration = 10000 * 1;
+    public static final long Unhealth_Debyt_Payment_Plan_Period_Duration = 10000 * 1;
     enum State{
-        Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered
+        Pending, Active, Suspended, Default, Close, GracePeriod, PlanOffered, HealthyDebt, UnhealthyDebt, Collection
     }
     // The default state is pending
     private State state = State.Pending;
@@ -14,6 +16,8 @@ public class Account {
     private double creditUsed = 0;
     private ArrayList<Bill> bills = new ArrayList<>();
     private long gracePeriodStartTimeStamp;
+    private long paymentPlanStartTimeStamp;
+    private long unhealthyDebtPaymentPlanStartTimeStamp;
 
 
     public Account(String username) {
@@ -65,7 +69,8 @@ public class Account {
             System.out.println("This account has been closed, please apply for another new account.");
         }else if ((this.getState() == Account.State.Suspended
                 || this.getState() == Account.State.GracePeriod
-                || this.getState() == Account.State.PlanOffered)){
+                || this.getState() == State.HealthyDebt
+                || this.getState() == State.UnhealthyDebt)){
             System.out.println("+++++++++++Account State Info+++++++++++++");
             System.out.println(String.format("Current State: Active\nTransition: %s -> Active\nEvent -> " +
                     "Having more than 0 available funds\nAction: Account is active", this.state));
@@ -128,6 +133,57 @@ public class Account {
             System.out.println(String.format("Invalid transition: %s -> GracePeriod", state));
         }
     }
+    public void HealthyDebt(long currTime){
+        if (this.state == State.PlanOffered) {
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: HealthyDebt\nTransition: %s -> HealthyDebt\n" +
+                    "Event -> The customer has accepted the plan\n" +
+                    "Action: Account is in HealthyDebt state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.HealthyDebt;
+            this.paymentPlanStartTimeStamp = currTime;
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }else{
+            System.out.println(String.format("Invalid transition: %s -> HealthyDebt", state));
+        }
+    }
+    public void UnhealthyDebt(){
+        if (this.state == State.PlanOffered) {
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: UnhealthyDebt\nTransition: %s -> UnhealthyDebt\n" +
+                    "Event -> The customer has refused the plan\n" +
+                    "Action: Account is in UnhealthyDebt state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.UnhealthyDebt;
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }else if (this.state == State.HealthyDebt){
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: UnhealthyDebt\nTransition: %s -> UnhealthyDebt\n" +
+                    "Event -> The customer fails to respond the payment offer within a reasonable period\n" +
+                    "Action: Account is in UnhealthyDebt state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.UnhealthyDebt;
+        }else{
+            System.out.println(String.format("Invalid transition: %s -> HealthyDebt", state));
+        }
+    }
+    public void Collection(){
+        if (this.state == State.UnhealthyDebt) {
+            System.out.println("+++++++++++Account State Info+++++++++++++");
+            System.out.println(String.format("Current State: Collection\nTransition: %s -> Collection\n" +
+                    "Event -> The customer fail to pay the bill before the final due.\n" +
+                    "Action: Account is in Collection state", this.state));
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++");
+            this.state = State.Collection;
+        } else if (this.state == State.Close) {
+            System.out.println("This account has been closed, please apply for another new account.");
+        }else{
+            System.out.println(String.format("Invalid transition: %s -> Collection", state));
+        }
+    }
+
     public void creditChecking(){
         System.out.println(String.format("Credit Limit: %.1f Credit Used: %.1f Available Fund %f", this.creditLimit, this.creditUsed, this.availableFund));
     }
@@ -142,6 +198,13 @@ public class Account {
     }
     public boolean isOverGracePeriod(long currTime){
         return (Grace_Period_Duration - (currTime - gracePeriodStartTimeStamp) < 0);
+    }
+    public boolean isOverPaymentPlanPeriod(long currTime){
+        return (Payment_Plan_Period_Duration - (currTime - paymentPlanStartTimeStamp) < 0);
+    }
+
+    public boolean isOverUnhealthyDebtPaymentPlanPeriod(long currTime){
+        return (Unhealth_Debyt_Payment_Plan_Period_Duration - (currTime - unhealthyDebtPaymentPlanStartTimeStamp) < 0);
     }
 
     public double getCreditUsed() {
@@ -168,5 +231,13 @@ public class Account {
 
     public long getGracePeriodStartTimeStamp() {
         return gracePeriodStartTimeStamp;
+    }
+
+    public long getPaymentPlanStartTimeStamp() {
+        return paymentPlanStartTimeStamp;
+    }
+
+    public long getUnhealthyDebtPaymentPlanStartTimeStamp() {
+        return unhealthyDebtPaymentPlanStartTimeStamp;
     }
 }
